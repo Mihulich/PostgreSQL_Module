@@ -7,6 +7,7 @@ Created on Mon Jul  8 13:56:29 2019
 
 import postgresql
 import random
+import time
 
 class DbTable:
     '''класс для работы с таблицами созданной ранее базой данных PostgreSQL:
@@ -25,13 +26,18 @@ class DbTable:
             self.db.close()
             self.db = None
             print('Database name in invalid')
-        if self.db:
-           table_names = db.query("SELECT tablename FROM (SELECT * FROM pg_catalog.pg_tables WHERE schemaname = 'public') AS public_tables ") 
-           if table_names:  # если переменная записалась, т.е. запрос нормально отработал
-               for names in table_names:    # в списке имен лежат кортежи из 1 значения
-                   self.db_tables.append(str(names[0]))
-           else:
-               print('Show tables Query is invalid! Check the corresponding class function!')
+        '''while True:
+            time.sleep(2) # ждем 2 сек для открытия базы данных
+            if self.db:
+               table_names = self.db.query("SELECT tablename FROM (SELECT * FROM pg_catalog.pg_tables WHERE schemaname = 'public') AS public_tables ") 
+               if table_names:  # если переменная записалась, т.е. запрос нормально отработал
+                   for names in table_names:    # в списке имен лежат кортежи из 1 значения
+                       self.db_tables.append(str(names[0]))
+               else:
+                   print('Show tables query is invalid! Check the corresponding class function!')'''
+                   
+    def ShowTables(self):
+        print (self.db_tables)
                
             
     def CreateNewTable(self, table_name, Column_DataType_List):
@@ -98,6 +104,7 @@ table_names1
 
         
 db = DbTable('postgres')
+db.ShowTables()
 db.CreateNewTable('customers', ['id SERIAL PRIMARY KEY', 'First_Name CHAR(64)', 'Last_Name CHAR(64)'])
 db.CreateNewTable_1('Orders', {'customer_id':'SMALLINT', 'goods':'CHAR(64)', 'price':'SMALLINT'})
 FirstNames = ['John', 'Jack', 'Sam', 'Ludvig', 'Harry', 'Kevin', 'Henry', 'Steve', 'Peter', 'Avraam']
